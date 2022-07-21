@@ -15,16 +15,18 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [largeImage, setLargeImage] = useState(null);
-
+  
   useEffect(() => {
     const options = { page, value };
 
     if (!value) {
       return
     }
+
+    setLoading(true)
     
     if (page === 1) {
-      setLoading(true)
+      
       Api(options).then(images => {
 
         if (images.hits.length === 0) {
@@ -36,7 +38,6 @@ export default function App() {
     }
 
     if (page > 1) {
-      setLoading(true)
       Api(options).then(images =>
 
         setImages(state => [...state, ...images.hits])
