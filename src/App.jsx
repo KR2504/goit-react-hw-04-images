@@ -23,7 +23,7 @@ const onVisibleButton = total <= images.length;
     const options = { page, value };
 
     if (!value) {
-      return
+      return;
     }
 
     setLoading(true)
@@ -33,8 +33,9 @@ const onVisibleButton = total <= images.length;
       Api(options).then(images => {
 
         if (images.hits.length === 0) {
-          return setError(error)
+          setError(value)
         }
+        
         setImages(images.hits)
         setTotal(images.total)
       }).catch(error => setError(error)).finally(()=> setLoading(false))
