@@ -35,9 +35,10 @@ const onVisibleButton = total <= images.length;
         if (images.hits.length === 0) {
           setError(value)
         }
-        
+
         setImages(images.hits)
         setTotal(images.total)
+        
       }).catch(error => setError(error)).finally(()=> setLoading(false))
     }
 
@@ -48,13 +49,14 @@ const onVisibleButton = total <= images.length;
 
       }).catch(error => setError(error)).finally(()=> setLoading(false))
     }
-  }, [value, page, error]);
+  }, [value, page]);
 
 
   const handleSubmit = (value) => {
     setValue(value);
     setPage(1);
     setImages([])
+    setError(null)
   }
     
 
