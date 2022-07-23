@@ -15,7 +15,10 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [largeImage, setLargeImage] = useState(null);
+  const [total, setTotal] = useState();
   
+const onVisibleButton = total <= images.length;
+
   useEffect(() => {
     const options = { page, value };
 
@@ -30,26 +33,27 @@ export default function App() {
       Api(options).then(images => {
 
         if (images.hits.length === 0) {
-          setError(error)
+          return setError(error)
         }
-
         setImages(images.hits)
-      }).catch(error => setError(error)).finally(() => setLoading(false));
+        setTotal(images.total)
+      }).catch(error => setError(error)).finally(()=> setLoading(false))
     }
 
     if (page > 1) {
-      Api(options).then(images =>
-
+      Api(options).then(images => {
+        
         setImages(state => [...state, ...images.hits])
-      ).catch(error => setError(error))
-        .finally(() => setLoading(false));
+
+      }).catch(error => setError(error)).finally(()=> setLoading(false))
     }
   }, [value, page, error]);
 
 
   const handleSubmit = (value) => {
     setValue(value);
-    setPage(1)
+    setPage(1);
+    setImages([])
   }
     
 
@@ -76,8 +80,8 @@ export default function App() {
       <div>
         <Searchbar onSubmit={handleSubmit} />
         {images && <ImageGallery images={images} largeImage={handleClickImage} />}
+        {(images.length !== 0 && !onVisibleButton) && (!loading && <Button onClick={handleLoadMore}/>)}
         {loading && <Loader />}
-        {images.length !== 0 && (loading ? <Loader /> : <Button onClick={handleLoadMore} />)}
         {showModal && <Modal onClose={onClose}>{largeImage}</Modal>}
         {error && <h1>Sorry, there are no images matching your search query. Please try again.</h1>}
       </div>
